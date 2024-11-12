@@ -32,9 +32,34 @@ const habitSlice = createSlice({
                 createdAt: new Date().toISOString(),
             }
             state.habits.push(newHabit);
+        },
+        toggleHabit: (
+            state,
+            action: PayloadAction<{ id: string; date: string }>
+          ) => {
+            console.log(action);
+      
+            const habit = state.habits.find((h) => h.id === action.payload.id);
+            if (habit) {
+              const index = habit.completedDates.indexOf(action.payload.date);
+              if (index > -1) {
+                habit.completedDates.splice(index, 1);
+              } else {
+                habit.completedDates.push(action.payload.date);
+              }
+            }
+        },
+        removeHabit: (
+            state,
+            action: PayloadAction<{id:string}>
+        ) => {
+            console.log(action);
+            const index = state.habits.findIndex((h) => h.id === action.payload.id)
+            if (index > -1)
+                state.habits.splice(index, 1);
         }
     }
 })
 
-export const { addHabit } = habitSlice.actions
+export const { addHabit, toggleHabit, removeHabit } = habitSlice.actions
 export default habitSlice.reducer
